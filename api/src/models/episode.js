@@ -7,6 +7,8 @@ import { createHash } from 'crypto';
 import { EnclosureSchema } from './enclosure';
 import Cache from './cache';
 import { ParseArticle } from '../parsers/article';
+import { getUrl } from '../utils/urls';
+import sanitize from '../utils/sanitize';
 
 export const EpisodeSchema = new Schema(
 	{
@@ -153,6 +155,10 @@ EpisodeSchema.plugin(autopopulate);
 EpisodeSchema.index({ podcast: 1, fingerprint: 1 }, { unique: true });
 EpisodeSchema.index({ podcast: 1, publicationDate: -1 });
 
+EpisodeSchema.methods.getUrl = function() {
+	return getUrl('episode_detail', this.podcast._id, this._id);
+};
+
 EpisodeSchema.methods.getParsedEpisode = async function() {
 	let cached = await Cache.findOne({ url: this.url });
 	if (cached) return cached;
@@ -164,8 +170,10 @@ EpisodeSchema.methods.getParsedEpisode = async function() {
 
 		if (!title) return null;
 
+		const content = sanitize(parsed.content);
+
 		cached = await Cache.create({
-			content: parsed.content,
+			content,
 			excerpt: excerpt,
 			image: parsed.lead_image_url || '',
 			publicationDate: parsed.date_published || this.publicationDate,

@@ -46,7 +46,7 @@ class AddOPMLModal extends React.Component {
 			baseURL: config.api.url,
 			data: fd,
 			headers: {
-				Authorization: `Bearer ${localStorage['jwt']}`,
+				'Authorization': `Bearer ${localStorage['jwt']}`,
 				'Content-Type': 'multipart/form-data',
 			},
 			method: 'POST',
@@ -64,7 +64,7 @@ class AddOPMLModal extends React.Component {
 					}, 5000);
 				}
 			})
-			.catch(err => {
+			.catch((err) => {
 				this.setState({
 					errorMessage: err.message,
 					errored: true,
@@ -133,7 +133,7 @@ class AddOPMLModal extends React.Component {
 						<div className="input-box">
 							<Dropzone
 								className="dropzone"
-								onDrop={acceptedFiles => {
+								onDrop={(acceptedFiles) => {
 									this.setState({
 										file: acceptedFiles[0],
 									});
@@ -178,7 +178,7 @@ class AddOPMLModal extends React.Component {
 					)}
 					<button
 						className="btn link cancel"
-						onClick={e => {
+						onClick={(e) => {
 							e.preventDefault();
 							this.resetModal();
 							this.props.done();

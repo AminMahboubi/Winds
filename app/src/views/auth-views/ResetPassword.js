@@ -117,10 +117,8 @@ class ResetPassword extends Component {
 					redirect: true,
 				});
 			})
-			.catch(err => {
-				if (window.console) {
-					console.log(err); // eslint-disable-line no-console
-				}
+			.catch((err) => {
+				console.log(err); // eslint-disable-line no-console
 			});
 	}
 
